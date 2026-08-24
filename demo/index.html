@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Valentina - Mis XV Anos">
+<meta property="og:description" content="14 de noviembre de 2026. Acompaname a celebrar.">
+<meta property="og:image" content="assets/portada.png">
+<meta name="theme-color" content="#0b1026">
+<title>Valentina - Mis XV Anos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --fondo:#0b1026; --fondo-alto:#141b3d;
+    --oro:#d8b45a; --oro-claro:#f0d999;
+    --texto:#eae6de; --texto-suave:#b9b3a7;
+    --script:'Great Vibes', cursive;
+    --serif:'Cormorant Garamond', Georgia, serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--fondo);color:var(--texto);font-family:var(--serif);
+       font-weight:300;line-height:1.7;overflow-x:hidden}
+
+  #cover{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;
+         align-items:center;justify-content:center;gap:2rem;
+         background:radial-gradient(ellipse at 50% 40%,var(--fondo-alto),var(--fondo));
+         transition:opacity .8s ease,transform .8s ease;cursor:pointer}
+  #cover.abierto{opacity:0;transform:scale(1.08);pointer-events:none}
+  #cover:focus-visible{outline:2px solid var(--oro-claro);outline-offset:-6px}
+  .cover-nombre{font-family:var(--script);font-size:clamp(3rem,14vw,5rem);
+                color:var(--oro-claro);line-height:1}
+  .cover-sub{font-size:.85rem;letter-spacing:.35em;text-transform:uppercase;
+             color:var(--texto-suave)}
+
+  .sobre{position:relative;width:min(78vw,300px);aspect-ratio:3/2;
+         background:linear-gradient(160deg,var(--fondo-alto),var(--fondo));
+         border:1px solid color-mix(in srgb,var(--oro) 50%,transparent);border-radius:4px;
+         box-shadow:0 24px 60px rgba(0,0,0,.55)}
+  .solapa{position:absolute;inset:0 0 auto 0;height:62%;
+          background:linear-gradient(180deg,color-mix(in srgb,var(--fondo-alto) 92%,var(--texto)),var(--fondo-alto));
+          clip-path:polygon(0 0,100% 0,50% 100%);
+          transform-origin:top;transition:transform .7s ease;
+          border-bottom:1px solid color-mix(in srgb,var(--oro) 35%,transparent)}
+  #cover.abierto .solapa{transform:rotateX(180deg)}
+  .sello{position:absolute;top:52%;left:50%;transform:translate(-50%,-50%);
+         width:52px;height:52px;border-radius:50%;
+         background:radial-gradient(circle at 35% 30%,var(--oro-claro),color-mix(in srgb,var(--oro) 65%,#000));
+         display:grid;place-items:center;font-family:var(--script);
+         font-size:1.6rem;color:var(--fondo);transition:opacity .4s ease}
+  #cover.abierto .sello{opacity:0}
+  .pista{font-size:.8rem;letter-spacing:.2em;color:var(--texto-suave);
+         animation:latido 2.4s ease-in-out infinite}
+  @keyframes latido{0%,100%{opacity:.5}50%{opacity:1}}
+
+  #particulas{position:fixed;inset:0;z-index:0;pointer-events:none}
+  #invitacion{position:relative;z-index:10;opacity:0;transition:opacity 1s ease;pointer-events:none}
+  #invitacion.visible{opacity:1;pointer-events:auto}
+
+  .seccion{max-width:640px;margin:0 auto;padding:4.5rem 1.5rem;text-align:center}
+  .reveal{opacity:0;transform:translateY(28px);
+          transition:opacity .9s ease,transform .9s ease}
+  .reveal.en-vista{opacity:1;transform:none}
+  .titulo{font-family:var(--script);font-size:clamp(2.2rem,9vw,3.2rem);
+          color:var(--oro-claro);margin-bottom:1.2rem}
+  .etiqueta{font-size:.72rem;letter-spacing:.34em;text-transform:uppercase;
+            color:var(--oro-claro);margin-bottom:.8rem}
+  @media (prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;transition:none}
+    .pista{animation:none}
+  }
+
+  .cuenta{display:flex;justify-content:center;gap:.6rem}
+  .unidad{min-width:64px;padding:.9rem .4rem;
+          border:1px solid color-mix(in srgb,var(--oro) 30%,transparent);
+          border-radius:6px;background:color-mix(in srgb,var(--texto) 3%,transparent)}
+  .unidad span{display:block;font-size:1.9rem;color:var(--oro-claro);
+               font-variant-numeric:tabular-nums}
+  .unidad small{font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;
+                color:var(--texto-suave)}
+  .post-evento{font-family:var(--script);font-size:2rem;color:var(--oro-claro)}
+
+  #yt-player{position:fixed;width:1px;height:1px;opacity:0;pointer-events:none;
+             top:0;left:0}
+  .btn-musica{position:fixed;top:1rem;left:1rem;z-index:60;width:44px;height:44px;
+              border-radius:50%;border:1px solid color-mix(in srgb,var(--oro) 50%,transparent);
+              background:color-mix(in srgb,var(--fondo) 75%,transparent);
+              color:var(--oro-claro);cursor:pointer;
+              display:grid;place-items:center;backdrop-filter:blur(6px)}
+  .btn-linea{display:inline-block;padding:.75rem 1.6rem;border-radius:999px;
+             border:1px solid var(--oro);background:transparent;color:var(--oro-claro);
+             font-family:var(--serif);font-size:.95rem;letter-spacing:.06em;
+             cursor:pointer}
+  .btn-linea:hover{background:color-mix(in srgb,var(--oro) 12%,transparent)}
+
+  .datos{margin:0 0 1.6rem}
+  .datos div{padding:.7rem 0;
+            border-bottom:1px solid color-mix(in srgb,var(--oro) 16%,transparent)}
+  .datos dt{font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;
+            color:var(--oro-claro)}
+  .datos dd{font-size:1.05rem}
+  .acciones{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;
+            margin-top:1rem}
+  .itinerario{list-style:none;text-align:left;max-width:320px;margin:0 auto}
+  .itinerario li{display:flex;gap:1rem;padding:.8rem 0;
+                 border-bottom:1px solid color-mix(in srgb,var(--oro) 16%,transparent)}
+  .itinerario span{color:var(--oro-claro);min-width:78px;font-variant-numeric:tabular-nums}
+
+  .form-rsvp{display:grid;gap:.7rem;max-width:340px;margin:1.6rem auto 0}
+  .form-rsvp[hidden]{display:none}
+  .form-rsvp input,.form-rsvp select,.form-rsvp textarea{
+    padding:.7rem .9rem;border-radius:6px;
+    border:1px solid color-mix(in srgb,var(--oro) 35%,transparent);
+    background:color-mix(in srgb,var(--texto) 4%,transparent);color:var(--texto);
+    font-family:var(--serif);font-size:1rem}
+  .form-rsvp textarea{resize:vertical}
+  .form-rsvp button[disabled]{opacity:.55;pointer-events:none}
+  .rsvp-estado{min-height:1.4rem;font-size:.9rem;color:var(--oro-claro)}
+
+  .hero{position:relative;min-height:78vh;display:grid;place-items:center;
+        overflow:hidden}
+  .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .hero::after{content:'';position:absolute;inset:0;
+               background:linear-gradient(180deg,color-mix(in srgb,var(--fondo) 35%,transparent),
+                                       color-mix(in srgb,var(--fondo) 85%,transparent))}
+  .hero-texto{position:relative;z-index:2;text-align:center}
+  .hero-nombre{font-family:var(--script);font-size:clamp(3rem,15vw,5.5rem);
+               color:var(--oro-claro);line-height:1;font-weight:400}
+  .galeria{display:grid;grid-template-columns:1fr;gap:.7rem}
+  @media (min-width:560px){.galeria{grid-template-columns:1fr 1fr}}
+  .galeria img{width:100%;height:auto;border-radius:8px;display:block}
+  /* el blanco y el padding del QR no siguen al tema: son la zona de silencio
+     que los lectores necesitan para reconocer el codigo */
+  .qr{width:180px;height:180px;border-radius:8px;background:#fff;padding:10px;
+      margin-top:1rem}
+  .pie{text-align:center;padding:3rem 1.5rem;font-family:var(--script);
+       font-size:1.6rem;color:var(--oro-claro);position:relative;z-index:10}
+</style>
+</head>
+<body>
+
+<canvas id="particulas" aria-hidden="true"></canvas>
+
+<div id="yt-player" aria-hidden="true"></div>
+<button id="btn-musica" class="btn-musica" type="button"
+        onclick="alternarMusica()" aria-label="Reproducir o pausar musica">
+  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+    <path d="M8 5v14l11-7z"/>
+  </svg>
+</button>
+
+<div id="cover" role="button" tabindex="0" aria-label="Abrir la invitacion"
+     onclick="abrirInvitacion()" onkeydown="teclaCover(event)">
+  <p class="cover-sub">Mis XV Anos</p>
+  <p class="cover-nombre">Valentina</p>
+  <div class="sobre">
+    <div class="solapa"></div>
+    <div class="sello">V</div>
+  </div>
+  <p class="pista">Toca el sobre para abrirlo</p>
+</div>
+
+<main id="invitacion">
+  <section class="hero">
+    <img src="assets/portada.png" alt="" width="1400" height="1400">
+    <div class="hero-texto">
+      <h1 class="hero-nombre">Valentina</h1>
+      <p class="etiqueta">Mis XV Anos</p>
+    </div>
+  </section>
+
+  <section class="seccion reveal">
+    <p>Con la bendicion de Dios y el amor de mis padres</p>
+    <dl class="datos">
+      <div><dt>Mis padres</dt><dd>Marcela Torres<br>Andres Gutierrez</dd></div>
+      <div><dt>Mis padrinos</dt><dd>Clara Restrepo<br>Julian Mendoza</dd></div>
+    </dl>
+  </section>
+
+  <section class="seccion reveal">
+    <p class="etiqueta">Con alegria</p>
+    <h2 class="titulo">Te espero</h2>
+    <p>Con el corazon lleno de gratitud, tengo el honor de invitarte a
+       celebrar conmigo este momento tan especial.</p>
+  </section>
+  <section class="seccion reveal">
+    <p class="etiqueta">Cuenta regresiva</p>
+    <div id="cuenta" class="cuenta">
+      <div class="unidad"><span id="cd-dias">--</span><small>Dias</small></div>
+      <div class="unidad"><span id="cd-horas">--</span><small>Horas</small></div>
+      <div class="unidad"><span id="cd-min">--</span><small>Min</small></div>
+      <div class="unidad"><span id="cd-seg">--</span><small>Seg</small></div>
+    </div>
+  </section>
+  <section class="seccion reveal">
+    <p class="etiqueta">Musica</p>
+    <h2 class="titulo">Nuestra cancion</h2>
+    <p>Tienes alguna sugerencia musical para la noche? Hazmela saber.</p>
+    <a class="btn-linea" id="btn-sugerir" target="_blank" rel="noopener">Enviar mi cancion favorita</a>
+    <button id="btn-musica-seccion" class="btn-linea" type="button"
+            onclick="alternarMusica()">Reproducir cancion</button>
+  </section>
+  <section class="seccion reveal">
+    <p class="etiqueta">Detalles del evento</p>
+    <h2 class="titulo">La celebracion</h2>
+    <dl class="datos">
+      <div><dt>Fecha</dt><dd>Sabado 14 de noviembre de 2026</dd></div>
+      <div><dt>Hora</dt><dd>7:00 PM</dd></div>
+      <div><dt>Lugar</dt><dd>Salon Jardin Los Almendros<br>Calle 30 #12-45, Cartagena</dd></div>
+    </dl>
+    <a class="btn-linea" href="https://maps.app.goo.gl/ejemplo" target="_blank" rel="noopener">Ver en Google Maps</a>
+    <div class="acciones">
+      <a class="btn-linea" id="btn-google-cal" target="_blank" rel="noopener">Google Calendar</a>
+      <button class="btn-linea" type="button" onclick="descargarICS()">Descargar invitacion</button>
+    </div>
+  </section>
+
+  <section class="seccion reveal">
+    <p class="etiqueta">Vestimenta</p>
+    <h2 class="titulo">Dress code</h2>
+    <p>Etiqueta formal.</p>
+    <p>Para resaltar el vestido de la quinceanera, les pedimos evitar el azul
+       noche, reservandolo exclusivamente para ella.</p>
+  </section>
+
+  <section class="seccion reveal">
+    <p class="etiqueta">Programa</p>
+    <h2 class="titulo">Itinerario</h2>
+    <ol class="itinerario">
+      <li><span>7:00 PM</span> Recepcion</li>
+      <li><span>8:00 PM</span> Vals</li>
+      <li><span>9:00 PM</span> Cena</li>
+      <li><span>10:00 PM</span> Fiesta</li>
+    </ol>
+  </section>
+
+  <section class="seccion reveal">
+    <p class="etiqueta">Confirmacion</p>
+    <h2 class="titulo">Me acompanas?</h2>
+    <p>Por favor confirma tu asistencia para poder tenerte en cuenta.</p>
+    <a class="btn-linea" id="btn-rsvp-wa" target="_blank" rel="noopener">Confirmar por WhatsApp</a>
+    <form id="form-rsvp" class="form-rsvp" hidden>
+      <input name="nombre" type="text" placeholder="Tu nombre" aria-label="Tu nombre" required>
+      <select name="asiste" aria-label="Confirmas tu asistencia?" required>
+        <option value="">Asistiras?</option>
+        <option value="si">Si, alli estare</option>
+        <option value="no">No podre asistir</option>
+      </select>
+      <input name="personas" type="number" min="1" max="10" value="1" aria-label="Numero de personas" required>
+      <textarea name="mensaje" rows="2" placeholder="Mensaje (opcional)" aria-label="Mensaje opcional"></textarea>
+      <button class="btn-linea" type="submit">Enviar confirmacion</button>
+      <p id="rsvp-estado" class="rsvp-estado" role="status"></p>
+    </form>
+  </section>
+
+  <section class="seccion reveal">
+    <p class="etiqueta">Recuerdos</p>
+    <h2 class="titulo">Galeria</h2>
+    <div class="galeria">
+      <img src="assets/foto-1.png" alt="Motivo decorativo de circulos dorados" width="1400" height="1400" loading="lazy">
+      <img src="assets/foto-2.png" alt="Motivo decorativo de lineas diagonales doradas" width="1400" height="1400" loading="lazy">
+      <img src="assets/foto-3.png" alt="Motivo decorativo de rejilla de puntos dorados" width="1400" height="1400" loading="lazy">
+    </div>
+  </section>
+
+  <section class="seccion reveal">
+    <p class="etiqueta">Obsequios</p>
+    <h2 class="titulo">Mesa de regalos</h2>
+    <p>Tu presencia es mi mejor regalo. Si deseas obsequiarme algo, puedes hacerlo aqui.</p>
+    <a class="btn-linea" href="https://ejemplo.com/mesa-de-regalos" target="_blank" rel="noopener">Ver mesa de regalos</a>
+  </section>
+
+  <section class="seccion reveal">
+    <p class="etiqueta">Para invitados de fuera</p>
+    <h2 class="titulo">Hospedaje</h2>
+    <dl class="datos">
+      <div><dt>Hotel</dt><dd>Hotel Casa del Mar</dd></div>
+      <div><dt>Codigo de reserva</dt><dd>VALE2026</dd></div>
+      <div><dt>Telefono</dt><dd>+57 605 123 4567</dd></div>
+    </dl>
+  </section>
+
+  <section class="seccion reveal">
+    <p class="etiqueta">Album compartido</p>
+    <h2 class="titulo">Tus fotos</h2>
+    <p>Comparte los momentos que captures esa noche.</p>
+    <img class="qr" src="assets/qr-album.png" alt="Codigo QR del album compartido" width="600" height="600" loading="lazy">
+  </section>
+
+  <footer class="pie">Con carino, Valentina</footer>
+</main>
+
+<script>
+const TEMA_PARTICULAS = {
+  densidad: 2500,
+  radioMin: 0.2,
+  radioMax: 1.7,
+  color: '200,220,255',
+  velocidad: 0.008
+};
+
+(function(){
+  const canvas = document.getElementById('particulas');
+  const ctx = canvas.getContext('2d');
+  const cfg = TEMA_PARTICULAS;
+  let particulas = [];
+
+  function redimensionar(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  function inicializar(){
+    particulas = [];
+    const total = Math.floor((canvas.width * canvas.height) / cfg.densidad);
+    for (let i = 0; i < total; i++){
+      particulas.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * (cfg.radioMax - cfg.radioMin) + cfg.radioMin,
+        sp: Math.random() * cfg.velocidad + 0.003,
+        ph: Math.random() * Math.PI * 2
+      });
+    }
+  }
+
+  function dibujar(t){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particulas.forEach(function(p){
+      const alpha = 0.3 + 0.7 * Math.abs(Math.sin(t * p.sp + p.ph));
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(' + cfg.color + ',' + alpha + ')';
+      ctx.fill();
+    });
+    requestAnimationFrame(dibujar);
+  }
+
+  redimensionar();
+  inicializar();
+  let tempoResize;
+  window.addEventListener('resize', function(){
+    clearTimeout(tempoResize);
+    tempoResize = setTimeout(function(){ redimensionar(); inicializar(); }, 150);
+  });
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    requestAnimationFrame(dibujar);
+  }
+})();
+
+const VIDEO_ID = 'NdYWuo9OFAw';
+
+let sonando = false, reproductor = null, ytListo = false, pendiente = false;
+
+window.onYouTubeIframeAPIReady = function(){
+  reproductor = new YT.Player('yt-player', {
+    height: '1', width: '1', videoId: VIDEO_ID,
+    playerVars: {autoplay: 0, loop: 1, playlist: VIDEO_ID, controls: 0},
+    events: {
+      onReady: function(){
+        ytListo = true;
+        if (pendiente){ reproductor.playVideo(); sonando = true; actualizarUIMusica(); }
+      },
+      onStateChange: function(e){
+        if (e.data === YT.PlayerState.PLAYING){ sonando = true; actualizarUIMusica(); }
+        else if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED){
+          sonando = false; actualizarUIMusica();
+        }
+      }
+    }
+  });
+};
+
+(function(){
+  const tag = document.createElement('script');
+  tag.src = 'https://www.youtube.com/iframe_api';
+  document.head.appendChild(tag);
+})();
+
+function iniciarMusica(){
+  if (ytListo && reproductor){
+    reproductor.playVideo(); sonando = true; actualizarUIMusica();
+  } else {
+    pendiente = true;
+    actualizarUIMusica();
+  }
+}
+
+function alternarMusica(){
+  if (!ytListo){ pendiente = !pendiente; actualizarUIMusica(); return; }
+  if (sonando){ reproductor.pauseVideo(); sonando = false; }
+  else { reproductor.playVideo(); sonando = true; }
+  actualizarUIMusica();
+}
+
+function musicaActiva(){
+  return ytListo ? sonando : pendiente;
+}
+
+function actualizarUIMusica(){
+  const play = '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+  const pausa = '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>';
+  const activa = musicaActiva();
+  const boton = document.getElementById('btn-musica');
+  boton.innerHTML = activa ? pausa : play;
+  boton.setAttribute('aria-label', activa ? 'Pausar cancion' : 'Reproducir cancion');
+  document.getElementById('btn-musica-seccion').textContent =
+    activa ? 'Pausar cancion' : 'Reproducir cancion';
+}
+
+function abrirInvitacion(){
+  const cover = document.getElementById('cover');
+  cover.classList.add('abierto');
+  // 800 debe coincidir con la duracion de transition en #cover (.8s)
+  setTimeout(function(){
+    cover.style.display = 'none';
+    document.getElementById('invitacion').classList.add('visible');
+    window.scrollTo(0, 0);
+    setTimeout(function(){ if (!sonando) iniciarMusica(); }, 800);
+  }, 800);
+}
+
+function teclaCover(ev){
+  if (ev.key === 'Enter' || ev.key === ' '){
+    ev.preventDefault();
+    abrirInvitacion();
+  }
+}
+
+const observador = new IntersectionObserver(function(entradas){
+  entradas.forEach(function(e){
+    if (e.isIntersecting) e.target.classList.add('en-vista');
+  });
+}, {threshold: 0.1});
+document.querySelectorAll('.reveal').forEach(function(el){ observador.observe(el); });
+
+const FECHA_EVENTO = '2026-11-14T19:00:00-05:00';
+const MENSAJE_POST_EVENTO = 'Gracias por acompanarme';
+
+const temporizador = setInterval(actualizarCuenta, 1000);
+
+function actualizarCuenta(){
+  const diff = new Date(FECHA_EVENTO) - new Date();
+  if (diff <= 0){
+    clearInterval(temporizador);
+    document.getElementById('cuenta').innerHTML =
+      '<p class="post-evento">' + MENSAJE_POST_EVENTO + '</p>';
+    return;
+  }
+  const dos = function(n){ return String(n).padStart(2, '0'); };
+  document.getElementById('cd-dias').textContent  = dos(Math.floor(diff / 86400000));
+  document.getElementById('cd-horas').textContent = dos(Math.floor((diff % 86400000) / 3600000));
+  document.getElementById('cd-min').textContent   = dos(Math.floor((diff % 3600000) / 60000));
+  document.getElementById('cd-seg').textContent   = dos(Math.floor((diff % 60000) / 1000));
+}
+
+actualizarCuenta();
+
+const EVENTO = {
+  titulo: 'XV Anos de Valentina',
+  lugar: 'Salon Jardin Los Almendros',
+  direccion: 'Calle 30 #12-45, Cartagena',
+  duracionHoras: 5
+};
+
+function marcasUTC(){
+  const inicio = new Date(FECHA_EVENTO);
+  const fin = new Date(inicio.getTime() + EVENTO.duracionHoras * 3600000);
+  const fmt = function(d){ return d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'; };
+  return {inicio: fmt(inicio), fin: fmt(fin)};
+}
+
+(function(){
+  const m = marcasUTC();
+  document.getElementById('btn-google-cal').href =
+    'https://calendar.google.com/calendar/render?action=TEMPLATE' +
+    '&text=' + encodeURIComponent(EVENTO.titulo) +
+    '&dates=' + m.inicio + '/' + m.fin +
+    '&location=' + encodeURIComponent(EVENTO.lugar + ', ' + EVENTO.direccion);
+})();
+
+function descargarICS(){
+  const m = marcasUTC();
+  const ics = [
+    'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Taller Invitaciones//ES',
+    'BEGIN:VEVENT',
+    'UID:' + m.inicio + '@invitaciones',
+    'DTSTAMP:' + m.inicio,
+    'DTSTART:' + m.inicio,
+    'DTEND:' + m.fin,
+    'SUMMARY:' + EVENTO.titulo,
+    'LOCATION:' + EVENTO.lugar + ', ' + EVENTO.direccion,
+    'END:VEVENT', 'END:VCALENDAR'
+  ].join('\r\n');
+  const enlace = document.createElement('a');
+  enlace.href = URL.createObjectURL(new Blob([ics], {type: 'text/calendar'}));
+  enlace.download = 'evento.ics';
+  enlace.click();
+  URL.revokeObjectURL(enlace.href);
+}
+
+const TELEFONO_RSVP = '+573001234567';
+
+function linkWhatsApp(telefono, texto){
+  const bruto = String(telefono).trim();
+  if (bruto.charAt(0) !== '+'){
+    throw new Error('Telefono sin codigo de pais, debe empezar por +: ' + telefono);
+  }
+  const limpio = bruto.slice(1).replace(/[^0-9]/g, '');
+  if (limpio.length < 8 || limpio.length > 15){
+    throw new Error('Telefono fuera del rango E.164 de 8 a 15 digitos: ' + telefono);
+  }
+  return 'https://wa.me/' + limpio + '?text=' + encodeURIComponent(texto);
+}
+
+(function(){
+  document.getElementById('btn-rsvp-wa').href = linkWhatsApp(
+    TELEFONO_RSVP,
+    'Hola Valentina! Confirmo mi asistencia a tus XV anos. Asistiremos: '
+  );
+  document.getElementById('btn-sugerir').href = linkWhatsApp(
+    TELEFONO_RSVP,
+    'Hola Valentina! Mi sugerencia musical para tu noche es: '
+  );
+})();
+
+const URL_SHEETS = '';
+
+(function(){
+  const form = document.getElementById('form-rsvp');
+  if (!URL_SHEETS) return;
+  form.hidden = false;
+
+  form.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    const estado = document.getElementById('rsvp-estado');
+    const boton = form.querySelector('button[type="submit"]');
+    const datos = Object.fromEntries(new FormData(form).entries());
+    estado.textContent = 'Enviando...';
+    boton.disabled = true;
+
+    fetch(URL_SHEETS, {method: 'POST', body: JSON.stringify(datos)})
+      .then(function(r){ return r.json(); })
+      .then(function(){
+        form.reset();
+        estado.textContent = 'Confirmacion recibida. Gracias!';
+      })
+      .catch(function(){
+        estado.innerHTML = 'No pudimos registrarla. Confirma por ' +
+          '<a href="' + document.getElementById('btn-rsvp-wa').href +
+          '" target="_blank" rel="noopener">WhatsApp</a>.';
+      })
+      .then(function(){ boton.disabled = false; });
+  });
+})();
+</script>
+</body>
+</html>
