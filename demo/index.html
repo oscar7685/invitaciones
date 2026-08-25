@@ -419,7 +419,11 @@ function abrirInvitacion(){
     cover.style.display = 'none';
     document.getElementById('invitacion').classList.add('visible');
     window.scrollTo(0, 0);
-    setTimeout(function(){ if (!sonando) iniciarMusica(); }, 800);
+    // la musica es opcional: sin el bloque de musica estas dos referencias no
+    // existen y arrancar la invitacion no puede depender de ellas
+    setTimeout(function(){
+      if (typeof iniciarMusica === 'function' && !sonando) { iniciarMusica(); }
+    }, 800);
   }, 800);
 }
 
