@@ -516,15 +516,23 @@ function linkWhatsApp(telefono, texto){
   return 'https://wa.me/' + limpio + '?text=' + encodeURIComponent(texto);
 }
 
+// un telefono mal declarado deja los dos botones sin href, ruidoso en consola para
+// el administrador y sin confirmacion falsa para el invitado; el error se atrapa aqui
+// porque este script continua mas abajo y una excepcion suelta se llevaria por
+// delante el formulario de RSVP, que es justo el respaldo de este canal
 (function(){
-  document.getElementById('btn-rsvp-wa').href = linkWhatsApp(
-    TELEFONO_RSVP,
-    'Hola Valentina! Confirmo mi asistencia a tus XV anos. Asistiremos: '
-  );
-  document.getElementById('btn-sugerir').href = linkWhatsApp(
-    TELEFONO_RSVP,
-    'Hola Valentina! Mi sugerencia musical para tu noche es: '
-  );
+  try {
+    document.getElementById('btn-rsvp-wa').href = linkWhatsApp(
+      TELEFONO_RSVP,
+      'Hola Valentina! Confirmo mi asistencia a tus XV anos. Asistiremos: '
+    );
+    document.getElementById('btn-sugerir').href = linkWhatsApp(
+      TELEFONO_RSVP,
+      'Hola Valentina! Mi sugerencia musical para tu noche es: '
+    );
+  } catch (e) {
+    console.error(e.message);
+  }
 })();
 
 const URL_SHEETS = '';
@@ -549,9 +557,11 @@ const URL_SHEETS = '';
         estado.textContent = 'Confirmacion recibida. Gracias!';
       })
       .catch(function(){
-        estado.innerHTML = 'No pudimos registrarla. Confirma por ' +
-          '<a href="' + document.getElementById('btn-rsvp-wa').href +
-          '" target="_blank" rel="noopener">WhatsApp</a>.';
+        const wa = document.getElementById('btn-rsvp-wa').getAttribute('href');
+        estado.innerHTML = wa
+          ? 'No pudimos registrarla. Confirma por <a href="' + wa +
+            '" target="_blank" rel="noopener">WhatsApp</a>.'
+          : 'No pudimos registrarla. Intenta de nuevo en un momento.';
       })
       .then(function(){ boton.disabled = false; });
   });
